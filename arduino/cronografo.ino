@@ -1,10 +1,9 @@
 /*
  para el LED IR : emisor
     330 ohms 
- fototransistor : receptor o sensor
-    10k ohms 
-    probar otros valores, por ejemplo 4.7 Kohms
-    5V <-------[fotodiodo]----|-------[resistencia]------GND
+ fotodiodo : receptor o sensor
+    82k ohms 
+    gnd<-------[fotodiodo]----|-------[resistencia]------5V
                               |
                               |
                             pin digital
@@ -16,11 +15,11 @@ https://hardwarehackingmx.wordpress.com/2014/01/15/leccion-20-arduino-sensor-inf
 
 conexion emisor y receptor
 
-  Emisor -  LED IR
+  Emisor - fotodiodo - LED IR
       (------- +   (pata larga a voltaje)
       (____    -   (pata corta a masa , negativo , marca plana , cuerpo grande dentro del led)
 
-  Receptor - fotodiodo
+  Receptor - fototransistor
       (----      +   (este es el colector: C tiene una marca plana o corte flat y es mas corto )
       (_________ -    ( pata larga a masa )
 
@@ -36,11 +35,6 @@ https://wiki.dfrobot.com/Arduino_LCD_KeyPad_Shield__SKU__DFR0009_
 FOTODIODO Sfh 203 Fa // Sfh203 Fa Osram
 
 conexion, resistencia
-https://electronics.stackexchange.com/questions/167328/photodiode-turn-digital-input-pin-into-1-with-little-light-input
-   5 Megohms mas o menos para 10 lux
-      change resitor to 1Megaohm and the digital pin turns 1 providing light (20 lux);
-      without light its analog value is at 400
-
       este parece mejor:
       https://www.i-ciencias.com/pregunta/48286/como-utilizar-sfh235-ir-fotodiodo-correctamente
 
