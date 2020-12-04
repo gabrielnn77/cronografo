@@ -16,3 +16,7 @@ cronógrafo para aire comprimido basado en Arduino
 * Muestra velocidad Máx (con el nro de disparo), Mín (con el nro de disparo), Promedio (con la cantidad de disparos que usó para calcular el promedio), y spread de la totalidad de los disparos registrados.
 * Muestra la energía en Joules. Por defecto lo calcula utilizando un peso de balín de 18 grains, pero se puede cambiar el peso desde los botones, y recalcula la energía de cada disparo
 * Para verificar el funcionamiento, se compararon las mediciones en simultáneo con un cronógrafo comercial marca Chrony modelo alpha (rojo), dando diferencias de +- 6 FPS . Creo que es factible mejorar la presición por dos caminos (pero no lo probé): eliminar el código que en el loop principal llama a la función que lee los botones (hace una lectura analógica del pin A0, para determinar que boton se presionó, creo que eso podría generar variaciones en el tiempo para atender la interrupciones disparadas por los sensores), dejando que solamente se muestre la velocidad del último disparo, y la otra forma de mejorar la presición , sería aumentar la distancia entre sensores, actualmente está en 10 cm, con llevarlo a 20 cm se mejoraría la presición en la toma del tiempo.
+
+# software o herramientas necesarias
+* aplicacion fritzing para visualizar el diagrama de conexión
+* IDE de arduino para subir el codigo a la placa
