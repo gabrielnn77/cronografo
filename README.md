@@ -21,3 +21,7 @@ cronógrafo para aire comprimido basado en Arduino
 * aplicacion fritzing para visualizar el diagrama de conexión, o algun visor de imágenes porque lo exporté a PNG
 * IDE de arduino para subir el codigo a la placa
 * freecad para ver o modificar el diseño de los soportes, y exportarlos a STL para imprimirlos en 3d
+
+# pruebas, fotos y videos
+* Simulacion 3d del soporte y caja: <link>https://youtu.be/3Tz094T5HoM</link>
+* Prueba inicial contra un chrony, con el codigo actual la diferencia de FPS es mas chica(+-5FPS): <link>https://youtu.be/s2DOzHH34lQ</link>
