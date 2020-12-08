@@ -1,4 +1,17 @@
 /*
+ * version : 0.8
+ *    agregada opcion en el menu para desabilitar los botones
+ *    esto es para probar si las lecturas son mas consistentes, porque
+ *    me estaba dando un diferencia con el chrony alpha de +-5FPS ( es decir, no siempre da
+ *    la misma diferencia, en la mayoría de las mediciones la diferencia es -3 FPS pero
+ *    en algunos da -5 o +5 FPS)
+ * 
+ * version : 0.7
+ *    mejorada la consistencia entre lecturas, se deshabilitan timer0 y timer1 desde la 
+ *    lectura del primer sensor, y se vuelven a habilitar despues de la lectura del segundo
+ *    los necesita a los dos timer, porque el timer0 lo usa para funciones delay en la lectura 
+ *    de los botones, y el timer1 lo usa para la iluminacion del display
+ * 
  para el LED IR : emisor
     330 ohms 
  fotodiodo : receptor o sensor
@@ -120,11 +133,13 @@ int lcd_key     = 0;
 #define modoSPREAD  4
 // muestra peso balin
 #define modoPESO    5
+// deshabilita los botones
+#define modoDISABLE    6
 // es el maximo valor de modo definido, es para manejar los botones y el cambio de modo
-#define modoTOPE 5
+#define modoTOPE 6
 
 //  es el tamaño del buffer para alamacenar mediciones
-#define CANT_DISPAROS 150
+#define CANT_DISPAROS 200
 
   volatile unsigned long desborde = 0;
   volatile unsigned char running = 0;
@@ -138,12 +153,13 @@ int lcd_key     = 0;
   byte TCCR1A_old;
   byte TCCR1B_old;
   
-  unsigned char idx_avg = 0;            //  cantidad de lecturas validas, para sacar el promedio
-  unsigned char idx_ant = 0;            //  indice lectura anterior, para detectar nuevas lecturas
-  unsigned char idx_show = 0;           //  indice lectura mostrada en el LCD
-  unsigned char idx_min = 0;            //  el indice del disparo a MIN vel
-  unsigned char idx_max = 0;            //  el indice del disparo a MAX vel
-  unsigned char show_mode = 0;          //  define el tipo de dato mostrado en el LCD
+  byte idx_avg = 0;            //  cantidad de lecturas validas, para sacar el promedio
+  byte idx_ant = 0;            //  indice lectura anterior, para detectar nuevas lecturas
+  byte idx_show = 0;           //  indice lectura mostrada en el LCD
+  byte idx_min = 0;            //  el indice del disparo a MIN vel
+  byte idx_max = 0;            //  el indice del disparo a MAX vel
+  byte show_mode = modoVEL;    //  define el tipo de dato mostrado en el LCD
+  boolean enable_keys = true;  // define si esta habilitada la lectura de los botones
 
   long peso_balin = 18;        // peso en gr, sin decimales
 
@@ -206,8 +222,9 @@ void setup() {
 ///  Serial.println("setup listo!");
 ///  Serial.println("------------------------------------------");
 
-  show_mode = 0;
+  show_mode = modoVEL;
   idx_show = 0;
+  enable_keys = true;
 
 
     //  preparo el timer2
@@ -275,17 +292,19 @@ void loop() {
     // @todo
     //  mostrar datos actualizados
     idx_show = idx_ant;
-    show_mode = 0;
+    show_mode = modoVEL;
     drawLCD(show_mode, idx_show);
 
     idx_ant++;
   }
 
-  lcd_key = read_LCD_buttons();
-  if(lcd_key != btnNONE){
-    button_to_mode(lcd_key);
-    drawLCD(show_mode, idx_show);
-    delay(300);
+  if(enable_keys){
+    lcd_key = read_LCD_buttons();
+    if(lcd_key != btnNONE){
+      button_to_mode(lcd_key);
+      drawLCD(show_mode, idx_show);
+      delay(300);
+    }
   }
   
 
@@ -413,46 +432,39 @@ void drawLCD(unsigned char modo, unsigned char idx_info){
  {
    case modoVEL:
      {
-     drawLCD_VEL(idx_info);
-     break;
+        drawLCD_VEL(idx_info);
+        break;
      }
    case modoMAX:
      {
-     drawLCD_MAX(idx_info);
-     break;
+        drawLCD_MAX(idx_info);
+        break;
      }
    case modoMIN:
      {
-     drawLCD_MIN(idx_info);
-     break;
+        drawLCD_MIN(idx_info);
+        break;
      }
    case modoAVG:
      {
-     drawLCD_AVG(idx_info);
-     break;
+        drawLCD_AVG(idx_info);
+        break;
      }
    case modoSPREAD:
      {
-     drawLCD_SPREAD(idx_info);
-     break;
+        drawLCD_SPREAD(idx_info);
+        break;
      }
    case modoPESO:
      {
-     drawLCD_PESO(idx_info);
-     break;
+        drawLCD_PESO(idx_info);
+        break;
      }
-   /*
-   case modoVEL:
-     {
-     drawLCD_VEL(idx_info);
-     break;
-     }
-   case modoVEL:
-     {
-     drawLCD_VEL(idx_info);
-     break;
-     }
-     */
+   case modoDISABLE:
+      {
+        drawLCD_DISABLE(idx_info);
+        break;
+      }
  }
   
 }
@@ -523,7 +535,6 @@ Serial.println("");
 }
 // --------------------------------------------------------------------------------------
 
-
 // --------------------------------------------------------------------------------------
 void drawLCD_MAX(unsigned char idx_info){
 
@@ -572,8 +583,6 @@ void drawLCD_MAX(unsigned char idx_info){
   
 }
 // --------------------------------------------------------------------------------------
-
-
 
 // --------------------------------------------------------------------------------------
 void drawLCD_MIN(unsigned char idx_info){
@@ -625,7 +634,6 @@ void drawLCD_MIN(unsigned char idx_info){
 }
 // --------------------------------------------------------------------------------------
 
-
 // --------------------------------------------------------------------------------------
 void drawLCD_AVG(unsigned char idx_info){
 
@@ -675,7 +683,6 @@ void drawLCD_AVG(unsigned char idx_info){
 }
 // --------------------------------------------------------------------------------------
 
-
 // --------------------------------------------------------------------------------------
 void drawLCD_SPREAD(unsigned char idx_info){
 
@@ -724,7 +731,6 @@ void drawLCD_SPREAD(unsigned char idx_info){
 }
 // --------------------------------------------------------------------------------------
 
-
 // --------------------------------------------------------------------------------------
 void drawLCD_PESO(unsigned char idx_info){
 
@@ -766,6 +772,26 @@ void drawLCD_PESO(unsigned char idx_info){
   lcd.print(pot, 1);
 }
 // --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+void drawLCD_DISABLE(unsigned char idx_info){
+
+///Serial.println(" drawLCD_DISABLE ");
+
+  lcd.clear();
+
+  //  linea 1
+  lcd.setCursor(0,0);
+  lcd.print("Bloquear");
+
+  //  linea 2
+  lcd.setCursor(0,1);
+  lcd.print(" teclado?");
+
+}
+// --------------------------------------------------------------------------------------
+
+
 
 // --------------------------------------------------------------------------------------
 void button_to_mode(int lcd_key){
@@ -811,9 +837,13 @@ void button_to_mode(int lcd_key){
    case btnSELECT:
      {
 //     lcd.print("SELECT");
-       show_mode = 0;
+       if(show_mode == modoDISABLE){
+          enable_keys = false;
+          break;
+       }
+       show_mode = modoVEL;
        idx_show = idx-1;
-     break;
+       break;
      }
      case btnNONE:
      {
