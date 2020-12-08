@@ -2,9 +2,7 @@
  * version : 0.8
  *    agregada opcion en el menu para desabilitar los botones
  *    esto es para probar si las lecturas son mas consistentes, porque
- *    me estaba dando un diferencia con el chrony alpha de +-5FPS ( es decir, no siempre da
- *    la misma diferencia, en la mayoría de las mediciones la diferencia es -3 FPS pero
- *    en algunos da -5 o +5 FPS)
+ *    me estaba dando un diferencia con el chrony alpha de +-5FPS
  * 
  * version : 0.7
  *    mejorada la consistencia entre lecturas, se deshabilitan timer0 y timer1 desde la 
@@ -294,15 +292,18 @@ void loop() {
     idx_show = idx_ant;
     show_mode = modoVEL;
     drawLCD(show_mode, idx_show);
+//Serial.print("drawLCD("); Serial.print(show_mode); Serial.print(" , "); Serial.print(idx_show); Serial.print(")     // "); Serial.println(__LINE__);
 
     idx_ant++;
   }
 
   if(enable_keys){
+//Serial.print("PREVIO drawLCD : enable_keys: ["); Serial.print(enable_keys); Serial.print("]     // "); Serial.println(__LINE__);
     lcd_key = read_LCD_buttons();
     if(lcd_key != btnNONE){
       button_to_mode(lcd_key);
-      drawLCD(show_mode, idx_show);
+      if(enable_keys) drawLCD(show_mode, idx_show);
+//Serial.print("drawLCD("); Serial.print(show_mode); Serial.print(" , "); Serial.print(idx_show); Serial.print(")     // "); Serial.println(__LINE__);
       delay(300);
     }
   }
@@ -790,6 +791,22 @@ void drawLCD_DISABLE(unsigned char idx_info){
 
 }
 // --------------------------------------------------------------------------------------
+void drawLCD_DISABLED(){
+
+//Serial.println(" drawLCD_DISABLED ");
+//Serial.print(" enable_keys : ");Serial.println(enable_keys);
+  lcd.clear();
+
+  //  linea 1
+  lcd.setCursor(0,0);
+  lcd.print("Teclado");
+
+  //  linea 2
+  lcd.setCursor(0,1);
+  lcd.print(" Bloqueado");
+
+}
+// --------------------------------------------------------------------------------------
 
 
 
@@ -839,10 +856,13 @@ void button_to_mode(int lcd_key){
 //     lcd.print("SELECT");
        if(show_mode == modoDISABLE){
           enable_keys = false;
-          break;
+          delay(250);
+          drawLCD_DISABLED();
        }
-       show_mode = modoVEL;
-       idx_show = idx-1;
+       else{
+          show_mode = modoVEL;
+          idx_show = idx-1;
+       }
        break;
      }
      case btnNONE:
