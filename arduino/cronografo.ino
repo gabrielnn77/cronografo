@@ -158,6 +158,7 @@ int lcd_key     = 0;
   byte idx_max = 0;            //  el indice del disparo a MAX vel
   byte show_mode = modoVEL;    //  define el tipo de dato mostrado en el LCD
   boolean enable_keys = true;  // define si esta habilitada la lectura de los botones
+  volatile byte count_err = 0;
 
   long peso_balin = 18;        // peso en gr, sin decimales
 
@@ -223,6 +224,7 @@ void setup() {
   show_mode = modoVEL;
   idx_show = 0;
   enable_keys = true;
+  count_err = 0;
 
 
     //  preparo el timer2
@@ -325,7 +327,11 @@ void loop() {
     TCCR1B = TCCR1B_old;
   }
 
-
+//  si son 3 errores CONSECUTIVOS o mas, habilito de nuevo el teclado
+  if(count_err > 2){
+    enable_keys = true;
+    count_err = 0;
+  }
     
 /*
    Serial.print("sensor 1 :  ");
@@ -400,10 +406,12 @@ void sensor2(){
   //  registro todo y reseteo contadores
   if(running){
     tiempos[idx] = tiempo_actual;
+    count_err = 0;
   }
   else{
     //  error de lectura, no estaba corriendo el reloj
     tiempos[idx] = 0;
+    if(count_err < 10) count_err++;
   }
 
   //  controlo de no desbordar el buffer de lecturas
