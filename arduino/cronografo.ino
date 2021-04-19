@@ -1,4 +1,6 @@
 /*
+ * version : 0.9
+ *    corregidos errores en el display y mas documentacion sobre las resistencias
  * version : 0.8
  *    agregada opcion en el menu para desabilitar los botones
  *    esto es para probar si las lecturas son mas consistentes, porque
@@ -11,13 +13,23 @@
  *    de los botones, y el timer1 lo usa para la iluminacion del display
  * 
  para el LED IR : emisor
-    330 ohms 
- fotodiodo : receptor o sensor
+    330 ohms - 180 ohms 
+                en algunos LED IR con 330 no tiene potencia para exitar el receptor
+                  - los LED IR que compre en zafaronni no anduvieron, les tenia que poner un resistencia
+                  de 50 ohms para que anden, pero calientan demasiado, se va a quemar
+                  - los que compre el 2021-04-10 en radiofuturo andan con resistencias de 180 ohms
+                  los anteriores (mas claritos) andan con 320 ohms
+                supuestamente tienen que ser de 850-900 nanometros, pero como son genericos
+                los vendedores ni saben de cuanto son
+                
+ fotodiodo : receptor o sensor (PULLUP: da un 0 cuando ve luz, y cuando cortas el az da un 1
     82k ohms 
     gnd<-------[fotodiodo]----|-------[resistencia]------5V
                               |
                               |
                             pin digital
+             el que anduvo es uno marca osram Sfh 203 Fa (los genericos no van)
+             
 
                             
 https://www.luisllamas.es/leer-un-pulsador-con-arduino/
@@ -26,7 +38,7 @@ https://hardwarehackingmx.wordpress.com/2014/01/15/leccion-20-arduino-sensor-inf
 
 conexion emisor y receptor
 
-  Emisor - fotodiodo - LED IR
+  Emisor - LED IR
       (------- +   (pata larga a voltaje)
       (____    -   (pata corta a masa , negativo , marca plana , cuerpo grande dentro del led)
 
@@ -333,12 +345,16 @@ void loop() {
     count_err = 0;
   }
     
+//-----------------------------------------------------------
 /*
    Serial.print("sensor 1 :  ");
    Serial.print(digitalRead(pinS1));
    Serial.print("    -    sensor 2 :  ");
    Serial.println(digitalRead(pinS2));
-*/
+   //delay(400);
+   */
+//-----------------------------------------------------------
+
 }
 // --------------------------------------------------------------------------------------
 
@@ -360,7 +376,7 @@ void sensor1(){
   
   running = ! running;
 
-  //  deshabilito timer0
+  //  deshabilito timer0 y timer1
   TCCR0A = 0;
   TCCR0B = 0;
   TCCR1A = 0;
@@ -561,7 +577,7 @@ void drawLCD_MAX(unsigned char idx_info){
   if(idx_max < 9){
     lcd.print("  ");
   }
-  else{
+  else if(idx_max < 99){
     lcd.print(" ");
   }
 
@@ -611,7 +627,7 @@ void drawLCD_MIN(unsigned char idx_info){
   if(idx_min < 9){
     lcd.print("  ");
   }
-  else{
+  else if(idx_min < 99){
     lcd.print(" ");
   }
 
@@ -657,10 +673,10 @@ void drawLCD_AVG(unsigned char idx_info){
 
   //  linea 2
   lcd.setCursor(0,1);
-  if(idx_avg < 9){
+  if(idx_avg < 10){
     lcd.print("  ");
   }
-  else{
+  else if(idx_avg < 100){
     lcd.print(" ");
   }
 
@@ -706,10 +722,10 @@ void drawLCD_SPREAD(unsigned char idx_info){
 
   //  linea 2
   lcd.setCursor(0,1);
-  if(idx_avg < 9){
+  if(idx_avg < 10){
     lcd.print("  ");
   }
-  else{
+  else if(idx_avg < 100){
     lcd.print(" ");
   }
 
@@ -757,7 +773,7 @@ void drawLCD_PESO(unsigned char idx_info){
   if(idx_info < 9){
     lcd.print("  ");
   }
-  else{
+  else if(idx_info < 99){
     lcd.print(" ");
   }
 
