@@ -25,3 +25,4 @@ cronógrafo para aire comprimido basado en Arduino
 # pruebas, fotos y videos
 * Simulacion 3d del soporte y caja: <link>https://youtu.be/3Tz094T5HoM</link>
 * Prueba inicial contra un chrony, con el codigo actual la diferencia de FPS es mas chica(+-5FPS): <link>https://youtu.be/s2DOzHH34lQ</link>
+* los videos anteriores estan hechos para el soporte anterior, pero no encajaba del todo bien la placa adentro de la caja, ademas al estar al costado, queda desequilibrado, recomiendo usar el soporte_2 que esta mas ajustado al tamaño del arduino y el shield de la pantalla
