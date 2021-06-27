@@ -6,6 +6,7 @@ cronógrafo para aire comprimido basado en Arduino
 * shield LCD 16x2 con botones <link>https://articulo.mercadolibre.com.ar/MLA-861304422-shield-display-lcd-1602-16x2-botones-arduino-_JM</link>
 * 2 fotodiodos. Yo use estos : osram Sfh 203 Fa <link>https://articulo.mercadolibre.com.ar/MLA-698467492-sfh-203-fa-fotodiodo-receptor-infrarrojo-900nm-itytarg-_JM</link> . Los baratos no funcionan.
 * 2 Leds infrarojos. Use unos baratos de 850 o 900 nm
+* 4 resistencias para adecuar las tensiones de los diodos emisores y reeptores. Ver valores y recomendaciones en los comentarios del código fuente.
 * soporte para los sensores y caja para el Arduino. Impreso en 3D con resina PLA (puede ser una mejor, pero esta funciona)
 * Alguna forma de alimentar el Arduino. Yo use un powerBank de esos para celulares (la contra es que para apagarlo hay que desenchufarlo, y queda fuera de la caja del arduino, con un cable usb de impresora), pero vienen modulos para arduino que usan una pila 18650 que se pueden montar dentro de la caja, y agregarle un switch de encendido, y hasta tienen una entrada microUSB para cargar la pila sin sacarla de la caja, con un cargador de celulares (tener en cuenta que hay que modificar la caja para darle lugar para el modulo de batería) <link>https://articulo.mercadolibre.com.ar/MLA-878152686-modulo-power-bank-para-1-bateria-18650-5v-3v-micro-usb-_JM</link>
 
