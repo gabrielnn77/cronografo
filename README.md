@@ -27,3 +27,9 @@ cronógrafo para aire comprimido basado en Arduino
 * Simulacion 3d del soporte y caja: <link>https://youtu.be/3Tz094T5HoM</link>
 * Prueba inicial contra un chrony, con el codigo actual la diferencia de FPS es mas chica(+-5FPS): <link>https://youtu.be/s2DOzHH34lQ</link>
 * los videos anteriores estan hechos para el soporte anterior, pero no encajaba del todo bien la placa adentro de la caja, ademas al estar al costado, queda desequilibrado, recomiendo usar el soporte_2 que esta mas ajustado al tamaño del arduino y el shield de la pantalla
+
+# nuevo diseño del soporte
+* la separacion entre sensores sera de 129 mm
+* el largo total sera de 230 mm
+* en breve subo los nuevos diseños, quiero mandarlos a imprimir primero, por si hay que modificar algo
+* con este nuevo diseño, hay que cambiar en el codigo del arduino la constante que define la separacion de los sensores, creo que de esta forma va a ser mas precisa la medicion, porque en el rango 830 - 1100 FPS no va a caer dentro del tiempo de un desborde del contador
