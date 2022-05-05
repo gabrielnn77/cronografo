@@ -18,6 +18,14 @@ cronógrafo para aire comprimido basado en Arduino
 * Muestra la energía en Joules. Por defecto lo calcula utilizando un peso de balín de 18 grains, pero se puede cambiar el peso desde los botones, y recalcula la energía de cada disparo
 * Para verificar el funcionamiento, se compararon las mediciones en simultáneo con un cronógrafo comercial marca Chrony modelo alpha (rojo), dando diferencias de +- 6 FPS . Creo que es factible mejorar la presición por dos caminos (pero no lo probé): eliminar el código que en el loop principal llama a la función que lee los botones (hace una lectura analógica del pin A0, para determinar que boton se presionó, creo que eso podría generar variaciones en el tiempo para atender la interrupciones disparadas por los sensores), dejando que solamente se muestre la velocidad del último disparo, y la otra forma de mejorar la presición , sería aumentar la distancia entre sensores, actualmente está en 10 cm, con llevarlo a 20 cm se mejoraría la presición en la toma del tiempo.
 
+# uso de los botones
+* por defecto, la pantalla muestra la velocidad del ultimo disparo. Con los botones UP y DOWN se visualizan los disparon anteriores y posteriores. Con los botones LEFT y RIGHT se va cambiando los modos de visualizacion: VELOCIDAD - vel MAX - vel MIN - vel PROMEDIO - SPREAD - PESO del balín (para el cálculo de energía) - DESHABILITAR teclado (lo usé para probar si deshabilitando la lectura de los botones daba lecturas de velocidad diferentes, pero no noté diferencia).
+* si esta en modo PESO, las teclas UP y DOWN modifican el peso del balín, lo que cambia el cálculo de energía en joules.
+* si esta en modo DESHABILITAR, y se presiona la tecla SELECT, se deshabilita el teclado
+* en cualquier otro modo, la tecla SELECT vuelve al modo VELOCIDAD
+* el teclado ademas dispone de una tecla RESET que reinicia la placa arduino
+* ![alt text](https://github.com/gabrielnn77/cronografo/blob/main/AR0438-Shield-Display-LCD-16%C3%972-con-Teclado-1.jpg?raw=true)
+
 # software o herramientas necesarias
 * aplicacion fritzing para visualizar el diagrama de conexión, o algun visor de imágenes porque lo exporté a PNG
 * IDE de arduino para subir el codigo a la placa
